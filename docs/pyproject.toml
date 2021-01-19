@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "scylla-monitoring-docs"
-description = "Scylla Monitoring Documentation"
+name = "cpp-driver"
+description = "Scylla C/C++ Driver"
 version = "0.1"
 authors = ["ScyllaDB Documentation Contributors"]
 

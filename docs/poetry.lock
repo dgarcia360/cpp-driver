@@ -472,7 +472,7 @@ python-versions = "*"
 
 [[package]]
 name = "sphinx-scylladb-theme"
-version = "0.1.19"
+version = "0.1.20"
 description = "A Sphinx Theme for ScyllaDB projects documentation"
 category = "main"
 optional = false
@@ -892,8 +892,8 @@ sphinx-notfound-page = [
     {file = "sphinx_notfound_page-0.5-py3-none-any.whl", hash = "sha256:557ad998d7a2897a5da7ba9ed0762a8f535c4250c49325db7b105e69c386f690"},
 ]
 sphinx-scylladb-theme = [
-    {file = "sphinx-scylladb-theme-0.1.19.tar.gz", hash = "sha256:aa19cc6171b06f5f7947765c2cf9ca48d784486067d9639aefb49c0087780aeb"},
-    {file = "sphinx_scylladb_theme-0.1.19-py3-none-any.whl", hash = "sha256:4a99cd05d266c5757e8f6aeb1ff614da85a654bb6ee64411b67c962d107952e3"},
+    {file = "sphinx-scylladb-theme-0.1.20.tar.gz", hash = "sha256:0723308ea09af249301d8a1db34c5b1af17a33a56b1987b165b2543c4eeb5410"},
+    {file = "sphinx_scylladb_theme-0.1.20-py3-none-any.whl", hash = "sha256:c895032538a2efc59a2cfb8a4039886c23a208964c1a2a02b4adfcf0c10189f0"},
 ]
 sphinx-sitemap = [
     {file = "sphinx-sitemap-2.1.0.tar.gz", hash = "sha256:ba3576f38e8d1cabde483dabed2cc2b958af85ff97f2a4442f990b02e967d6a5"},

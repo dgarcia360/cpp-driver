@@ -4,6 +4,6 @@
    :titlesonly:
 
    index
-   api
+   api/library_root
    topics/*
    topics/dse_features/*

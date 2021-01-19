@@ -3,6 +3,7 @@ import os
 import sys
 import yaml
 import re
+import textwrap
 from datetime import date
 from docutils import nodes
 from sphinx.util import logging
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 # If your documentation needs a minimal Sphinx version, state it here.
 #
 needs_sphinx = '1.8'
+sys.path.insert(0, os.path.abspath('../../'))
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -104,9 +106,6 @@ language = None
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'lib', 'lib64','**/_common/*', 'README.md', '.git', '.github', '_utils', '_templates', 'rst_include']
-
-# Suppress warnings for upstream content.
-suppress_warnings = [ 'misc.highlighting_failure' ]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -233,13 +232,24 @@ exhale_args = {
     "containmentFolder":     "./api",
     "rootFileName":          "library_root.rst",
     "rootFileTitle":         "Library API",
-    "doxygenStripFromPath":  "../..",
+    "doxygenStripFromPath":  "..",
     # Suggested optional arguments
     "createTreeView":        True,
-    # TIP: if using the sphinx-bootstrap-theme, you need
-    # "treeViewIsBootstrap": True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "INPUT = ../../include"
+    "exhaleDoxygenStdin": textwrap.dedent('''
+        INPUT = ../../include
+        PREDEFINED = "DSE_EXPORT=" = "CASS_EXPORT="
+        EXCLUDE_SYMBOLS = XX* DSE_DEPRECATED CASS_ERROR CASS_ERROR_MAP CASS_ERROR_LAST_ENTRY CASS_LOG_LEVEL_MAP CASS_LOG_LAST_ENTRY CASS_DEPRECATED
+        ENABLE_PREPROCESSING = YES
+        MACRO_EXPANSION = YES
+        EXPAND_ONLY_PREDEF = NO
+        SKIP_FUNCTION_MACROS = YES
+        TYPEDEF_HIDES_STRUCT = YES
+        EXTRACT_ALL = YES
+        INLINE_SOURCES = NO
+        ALIASES = dse{1}="<b>Requires DataStax Enterprise:</b> \1" cassandra{1}="<b>Requires Apache Cassandra:</b> \1"
+    ''')
+
 }
 
 # -- Options for LaTeX page output ---------------------------------------
