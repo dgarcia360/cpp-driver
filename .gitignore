@@ -54,8 +54,10 @@ src/driver_config.hpp
 
 # API docs files
 Doxyfile
-docs
-
+docs/_build
+docs/source/.doctrees
+docs/_source
+doxygen
 # editor
 *.swp
 *~
