@@ -234,11 +234,11 @@ exhale_args = {
     "rootFileTitle":         "Library API",
     "doxygenStripFromPath":  "..",
     # Suggested optional arguments
-    "createTreeView":        True,
+    "createTreeView":        False,
     "exhaleExecutesDoxygen": True,
     "exhaleDoxygenStdin": textwrap.dedent('''
         INPUT = ../../include
-        PREDEFINED = "DSE_EXPORT=" = "CASS_EXPORT="
+        PREDEFINED +="CASS_EXPORT="
         EXCLUDE_SYMBOLS = XX* DSE_DEPRECATED CASS_ERROR CASS_ERROR_MAP CASS_ERROR_LAST_ENTRY CASS_LOG_LEVEL_MAP CASS_LOG_LAST_ENTRY CASS_DEPRECATED
         ENABLE_PREPROCESSING = YES
         MACRO_EXPANSION = YES
@@ -247,7 +247,8 @@ exhale_args = {
         TYPEDEF_HIDES_STRUCT = YES
         EXTRACT_ALL = YES
         INLINE_SOURCES = NO
-        ALIASES = dse{1}="<b>Requires DataStax Enterprise:</b> \1" cassandra{1}="<b>Requires Apache Cassandra:</b> \1"
+        ALIASES += dse{1}="<b>Requires DataStax Enterprise:</b> \1"
+        ALIASES += cassandra{1}="<b>Requires Apache Cassandra:</b> \1"
     ''')
 
 }
