@@ -33,7 +33,8 @@ clean:
 
 .PHONY: preview
 preview: setup
-	$(POETRY) run sphinx-autobuild -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml --port 5500 --re-ignore api/*
+	$(POETRY) run sphinx-autobuild -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml --port 5500
+
 .PHONY: dirhtml
 dirhtml: setup
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
@@ -68,11 +69,12 @@ dummy: 	setup
 linkcheck: setup
 	$(SPHINXBUILD) -b linkcheck $(SOURCEDIR) $(BUILDDIR)/linkcheck
 
+.PHONY: multiversion
 multiversion: setup
 	@mkdir -p $(HOME)/.cache/pypoetry/virtualenvs
-	$(POETRY) run sphinx-multiversion source _build/dirhtml
-		--pre-build "cd .."  \
-		--pre-build "find . -name README.md -execdir mv '{}' index.md ';'"
+	$(POETRY) run sphinx-multiversion source _build/dirhtml \
+    	--pre-build "find .. -mindepth 2 -name README.md -execdir mv '{}' index.md ';'"
+
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/dirhtml."
 
