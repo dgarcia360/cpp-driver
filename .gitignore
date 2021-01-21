@@ -22,7 +22,6 @@ cmake_*.cmake
 CMakeFiles
 CMakeCache.txt
 CMakeScripts
-Makefile
 install_manifest.txt
 
 # library files

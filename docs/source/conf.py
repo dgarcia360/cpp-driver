@@ -29,10 +29,7 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx.ext.extlinks',
     'sphinx_scylladb_theme',
-    'sphinx_multiversion',
-    'breathe',
-    'exhale',
-]
+    'sphinx_multiversion']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -105,7 +102,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'lib', 'lib64','**/_common/*', 'README.md', '.git', '.github', '_utils', '_templates', 'rst_include']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -132,9 +129,7 @@ def setup(app):
     app.add_transform(AutoStructify)
 
     # Replace DataStax links
-    replacements = {
-        r'http://datastax.github.io/cpp-driver/api/': "/master/doxygen",
-    }
+    replacements = { }
     app.add_config_value('replacements', replacements, True)
     app.connect('source-read', replace_relative_links)
 
@@ -219,39 +214,6 @@ smv_remote_whitelist = r"^origin$"
 smv_released_pattern = r'^tags/.*$'
 # Format for versioned output directories inside the build directory
 smv_outputdir_format = '{ref.name}'
-
-# -- Options for breathe (doxygen reference) ------------------------------
-
-# Setup the breathe extension
-breathe_projects = {"api": "../../doxygen/xml"}
-breathe_default_project = "api"
-
-# Setup the exhale extension
-exhale_args = {
-    # These arguments are required
-    "containmentFolder":     "./api",
-    "rootFileName":          "library_root.rst",
-    "rootFileTitle":         "API Documentation",
-    "doxygenStripFromPath":  "..",
-    # Suggested optional arguments
-    "createTreeView":        False,
-    "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin": textwrap.dedent('''
-        INPUT = ../../include
-        PREDEFINED +="CASS_EXPORT="
-        EXCLUDE_SYMBOLS = XX* DSE_DEPRECATED CASS_ERROR CASS_ERROR_MAP CASS_ERROR_LAST_ENTRY CASS_LOG_LEVEL_MAP CASS_LOG_LAST_ENTRY CASS_DEPRECATED
-        ENABLE_PREPROCESSING = YES
-        MACRO_EXPANSION = YES
-        EXPAND_ONLY_PREDEF = NO
-        SKIP_FUNCTION_MACROS = YES
-        TYPEDEF_HIDES_STRUCT = YES
-        EXTRACT_ALL = YES
-        INLINE_SOURCES = NO
-        ALIASES += dse{1}="<b>Requires DataStax Enterprise:</b> \1"
-        ALIASES += cassandra{1}="<b>Requires Apache Cassandra:</b> \1"
-    ''')
-
-}
 
 # -- Options for LaTeX page output ---------------------------------------
 
