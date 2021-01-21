@@ -57,6 +57,7 @@ Doxyfile
 docs/_build
 docs/source/.doctrees
 docs/_source
+docs/poetry.lock
 doxygen
 # editor
 *.swp
