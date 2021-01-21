@@ -73,7 +73,7 @@ linkcheck: setup
 multiversion: setup
 	@mkdir -p $(HOME)/.cache/pypoetry/virtualenvs
 	$(POETRY) run sphinx-multiversion source _build/dirhtml \
-    	--pre-build "find .. -mindepth 2 -name README.md -execdir mv '{}' index.md ';'"
+		--pre-build "find .. -mindepth 2 -name README.md -execdir mv '{}' index.md ';'"
 
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/dirhtml."
