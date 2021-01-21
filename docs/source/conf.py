@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
-import yaml
 import re
-import textwrap
+import sys
+import subprocess
+import yaml
 from datetime import date
 from docutils import nodes
 from sphinx.util import logging
@@ -29,7 +29,9 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx.ext.extlinks',
     'sphinx_scylladb_theme',
-    'sphinx_multiversion']
+    'sphinx_multiversion',
+    'breathe'
+]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -137,6 +139,9 @@ def setup(app):
     app.add_lexer("cql", CQLLexer())
     app.add_lexer("ditaa", DitaaLexer())
 
+    #  Generate API documentation
+    app.connect("builder-inited", generate_doxygen)
+
 # Custom variables
 rst_prolog = """
 .. |mon_version| replace:: 3.1
@@ -211,6 +216,54 @@ smv_remote_whitelist = r"^origin$"
 smv_released_pattern = r'^tags/.*$'
 # Format for versioned output directories inside the build directory
 smv_outputdir_format = '{ref.name}'
+
+# -- Options for Doxygen (API Reference) ---------------------------------
+breathe_projects = {
+	'API': "../../doxygen/xml/"
+}
+breathe_default_project = 'API'
+breathe_default_members = ('members', 'undoc-members')
+
+def _generate_doxygen_xml(xmldir):
+    """Run the doxygen make command in the designated folder"""
+    folder = os.path.join(os.path.dirname(__file__), xmldir)
+    try:
+        retcode = subprocess.call("cd %s; make" % folder, shell=True)
+        if retcode < 0:
+            sys.stderr.write("doxygen terminated by signal %s" % (-retcode))
+    except OSError as e:
+        sys.stderr.write("doxygen execution failed: %s" % e)
+
+def _generate_definitions(outdir, definitions, project):
+    """Write definition docs in the designated outdir folder"""
+    for obj in definitions:
+        with open(os.path.join(os.path.dirname(__file__), outdir + '/' + obj + '.rst'), 'w') as t_file:
+            t_file.write(obj + "\n" + "=" * len(obj) + "\n\n" + ".. doxygenfile:: " + obj +" \n  :project: " + project)
+
+def _generate_structs(outdir, structs, project):
+    """Write structs docs in the designated outdir folder"""
+    for obj in structs:
+        with open(os.path.join(os.path.dirname(__file__), outdir + '/struct.' + obj + '.rst'), 'w') as t_file:
+            t_file.write(obj + "\n" + "=" * len(obj) + "\n\n" + ".. doxygenstruct:: " + obj +" \n  :project: " + project)
+
+def _generate_doxygen_rst(xmldir, outdir):
+    """Autogenerate doxygen docs in the designated outdir folder"""
+    definitions = []
+    structs = []
+    files = os.listdir(os.path.join(os.path.dirname(__file__), xmldir))
+    for file_name in files:
+        if '_8h.xml' in file_name:
+          definitions.append(file_name.replace('_8h.xml', '.h'))  
+        elif 'struct' in file_name and '__' not in file_name:
+          structs.append(file_name.replace('struct', '').replace('.xml',''))  
+
+    _generate_definitions(outdir + '/definitions', definitions, breathe_default_project)
+    _generate_structs(outdir + '/structs', structs, breathe_default_project)
+
+def generate_doxygen(app):
+    DOXYGEN_XML_DIR = breathe_projects[breathe_default_project]
+    _generate_doxygen_xml(DOXYGEN_XML_DIR)
+    _generate_doxygen_rst(DOXYGEN_XML_DIR, './api')
 
 # -- Options for LaTeX page output ---------------------------------------
 
