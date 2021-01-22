@@ -5,6 +5,7 @@ SPHINXBUILD   = $(POETRY) run sphinx-build
 PAPER         =
 BUILDDIR      = _build
 SOURCEDIR     = _source
+DOXYGENDIR    = ../doxygen
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -23,6 +24,7 @@ pristine: clean
 .PHONY: setup
 setup:
 	./_utils/setup.sh
+	cd .. && doxygen Doxyfile.in
 	cp -TLr source $(SOURCEDIR)
 	cd $(SOURCEDIR) && find . -name README.md -execdir mv '{}' index.md ';'
 
@@ -30,6 +32,7 @@ setup:
 clean:
 	rm -rf $(BUILDDIR)/*
 	rm -rf $(SOURCEDIR)/*
+	rm -rf $(DOXYGENDIR)/*
 
 .PHONY: preview
 preview: setup
@@ -72,9 +75,7 @@ linkcheck: setup
 .PHONY: multiversion
 multiversion: setup
 	@mkdir -p $(HOME)/.cache/pypoetry/virtualenvs
-	$(POETRY) run sphinx-multiversion source _build/dirhtml \
-		--pre-build "find .. -mindepth 2 -name README.md -execdir mv '{}' index.md ';'"
-
+	$(POETRY) run ./_utils/multiversion.sh
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/dirhtml."
 
