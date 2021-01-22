@@ -1,20 +1,11 @@
-API
-===
+API Documentation
+=================
 
-Files
------
+Classes implementing the C/C++ Driver for ScyllaDB.
 
-.. toctree::
-    :maxdepth: 2
-    :glob:
-    
-    definitions/index
-
-Structs
--------
 
 .. toctree::
     :maxdepth: 2
     :glob:
     
-    structs/index
+    *

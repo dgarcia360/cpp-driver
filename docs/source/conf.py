@@ -238,27 +238,16 @@ def _generate_definitions(outdir, definitions, project):
     """Write definition docs in the designated outdir folder"""
     for obj in definitions:
         with open(os.path.join(os.path.dirname(__file__), outdir + '/' + obj + '.rst'), 'w') as t_file:
-            t_file.write(obj + "\n" + "=" * len(obj) + "\n\n" + ".. doxygenfile:: " + obj +" \n  :project: " + project)
-
-def _generate_structs(outdir, structs, project):
-    """Write structs docs in the designated outdir folder"""
-    for obj in structs:
-        with open(os.path.join(os.path.dirname(__file__), outdir + '/struct.' + obj + '.rst'), 'w') as t_file:
-            t_file.write(obj + "\n" + "=" * len(obj) + "\n\n" + ".. doxygenstruct:: " + obj +" \n  :project: " + project)
+            t_file.write(obj + "\n" + "=" * len(obj) + "\n\n" + ".. doxygenfile:: " + obj + "\n  :project: " + project)
 
 def _generate_doxygen_rst(xmldir, outdir):
     """Autogenerate doxygen docs in the designated outdir folder"""
     definitions = []
-    structs = []
     files = os.listdir(os.path.join(os.path.dirname(__file__), xmldir))
     for file_name in files:
         if '_8h.xml' in file_name:
-          definitions.append(file_name.replace('_8h.xml', '.h'))  
-        elif 'struct' in file_name and '__' not in file_name:
-          structs.append(file_name.replace('struct', '').replace('.xml',''))  
-
-    _generate_definitions(outdir + '/definitions', definitions, breathe_default_project)
-    _generate_structs(outdir + '/structs', structs, breathe_default_project)
+          definitions.append(file_name.replace('_8h.xml', '.h'))
+    _generate_definitions(outdir, definitions, breathe_default_project)
 
 def generate_doxygen(app):
     DOXYGEN_XML_DIR = breathe_projects[breathe_default_project]
