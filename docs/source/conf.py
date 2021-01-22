@@ -139,9 +139,6 @@ def setup(app):
     app.add_lexer("cql", CQLLexer())
     app.add_lexer("ditaa", DitaaLexer())
 
-    #  Generate API documentation
-    app.connect("builder-inited", generate_doxygen)
-
 # Custom variables
 rst_prolog = """
 .. |mon_version| replace:: 3.1
@@ -223,36 +220,6 @@ breathe_projects = {
 }
 breathe_default_project = 'API'
 breathe_default_members = ('members', 'undoc-members')
-
-def _generate_doxygen_xml(xmldir):
-    """Run the doxygen make command in the designated folder"""
-    folder = os.path.join(os.path.dirname(__file__), xmldir)
-    try:
-        retcode = subprocess.call("cd %s; make" % folder, shell=True)
-        if retcode < 0:
-            sys.stderr.write("doxygen terminated by signal %s" % (-retcode))
-    except OSError as e:
-        sys.stderr.write("doxygen execution failed: %s" % e)
-
-def _generate_definitions(outdir, definitions, project):
-    """Write definition docs in the designated outdir folder"""
-    for obj in definitions:
-        with open(os.path.join(os.path.dirname(__file__), outdir + '/' + obj + '.rst'), 'w') as t_file:
-            t_file.write(obj + "\n" + "=" * len(obj) + "\n\n" + ".. doxygenfile:: " + obj + "\n  :project: " + project)
-
-def _generate_doxygen_rst(xmldir, outdir):
-    """Autogenerate doxygen docs in the designated outdir folder"""
-    definitions = []
-    files = os.listdir(os.path.join(os.path.dirname(__file__), xmldir))
-    for file_name in files:
-        if '_8h.xml' in file_name:
-          definitions.append(file_name.replace('_8h.xml', '.h'))
-    _generate_definitions(outdir, definitions, breathe_default_project)
-
-def generate_doxygen(app):
-    DOXYGEN_XML_DIR = breathe_projects[breathe_default_project]
-    _generate_doxygen_xml(DOXYGEN_XML_DIR)
-    _generate_doxygen_rst(DOXYGEN_XML_DIR, './api')
 
 # -- Options for LaTeX page output ---------------------------------------
 
